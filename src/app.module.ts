@@ -12,18 +12,10 @@ import { NatsModule } from './nats/nats.module';
   imports: [
     StudentModule,
     ConfigModule.forRoot({
-      envFilePath: `.${process.env.NODE_ENV}.env`,
+      // envFilePath: `.${process.env.NODE_ENV}.env`,
+      envFilePath: null,
       isGlobal: true,
   }),
-    ClientsModule.register([
-      {
-        name: 'NATS_SERVICE',
-        transport: Transport.NATS,
-        options: {
-          servers: ['nats://192.162.246.63:4222'],
-        },
-      },
-    ]),
     SequelizeModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

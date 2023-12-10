@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Grades } from 'src/grades/grades.model';
 import { Student } from 'src/student/student.model';
@@ -8,6 +8,7 @@ import { StudentStatisticDto } from './Dto/student-statistic.dto';
 import { SubjectStatisticDto } from './Dto/subject-statistic.dto';
 import { StudentDto } from './Dto/student.dto';
 import { QueryTypes } from 'sequelize';
+import { StudentService } from 'src/student/student.service';
 
 export interface StudentStatistic {
       personalCode: string,
@@ -24,14 +25,15 @@ export interface StudentStatistic {
 export class StatisticService {
 
     constructor(@InjectModel(Grades) private gradesRepository: typeof Grades,
-                private readonly sequelize: Sequelize) {}
+                private readonly sequelize: Sequelize,
+                private studentService: StudentService) {}
 
     async getLog(page: number = 1, limit: number = 10): Promise<LogDto[]> {
         const logs = await this.gradesRepository.findAll({
           offset: (page - 1) * limit,
           limit,
           order: [['createdAt', 'DESC']],
-          include: [{ model: Student, attributes: ['personalCode', 'firstName', 'lastName'] }],
+          include: [{ model: Student, attributes: ['personalCode', 'name', 'lastName'] }],
         });
     
         return logs.map((log) => ({
@@ -47,6 +49,12 @@ export class StatisticService {
     }
 
     async getStudentStatistic(personalCode: string) {
+      const student = await this.studentService.getUserByPersonalCode(
+        personalCode,
+      );
+      if(!student) {
+        throw new HttpException('Cтудент с указанным персональным кодом не найден', HttpStatus.NOT_FOUND)
+      }
         const studentStatistic: StudentStatistic[] = await this.sequelize.query(`
         SELECT
             s."personalCode",

@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import * as NATS from 'nats';
 import { CreateGradesDto } from 'src/nats/Dto/create-grades.dto';
 import { StudentDto } from 'src/statistic/Dto/student.dto';
@@ -12,8 +11,7 @@ import { Grades } from 'src/grades/grades.model';
 @Injectable()
 export class NatsService {
 
-    constructor(private readonly configService: ConfigService,
-                private studentService: StudentService,
+    constructor( private studentService: StudentService,
                 @InjectModel(Grades) private gradesRepository: typeof Grades, ) {}
 
     async onModuleInit() {
@@ -56,11 +54,10 @@ export class NatsService {
   async requestStudentData(personalCode: string) {
     const nc = await NATS.connect({ servers: 'nats://192.162.246.63:4222' });
     const sc = NATS.StringCodec();
-    const requestData = { personalCode }
     let responseData: string | undefined; 
 
     try {
-      const response = await nc.request('students.v1.get', sc.encode(JSON.stringify(requestData)), { timeout: 1000 });
+      const response = await nc.request('students.v1.get', sc.encode(personalCode), { timeout: 1000 });
       responseData = sc.decode(response.data);
     } catch (err) {
       console.log(`problem with request: ${err.message}`);
