@@ -40,7 +40,7 @@ export class StatisticService {
           grade: log.grade,
           student: {
             personalCode: log.student.personalCode,
-            name: log.student.firstName,
+            name: log.student.name,
             lastName: log.student.lastName,
           },
         }));
@@ -49,22 +49,25 @@ export class StatisticService {
     async getStudentStatistic(personalCode: string) {
         const studentStatistic: StudentStatistic[] = await this.sequelize.query(`
         SELECT
-          s."personalCode",
-          s."firstName" as name,
-          s."lastName",
-          g.subject,
-          MAX(g.grade) as maxGrade,
-          MIN(g.grade) as minGrade,
-          AVG(g.grade) as avgGrade,
-          COUNT(g.grade) as totalGrades
-        FROM
-          "Students" as s
-        LEFT JOIN
-          "Grades" as g ON s."personalCode" = g."personalCode"
-        WHERE
-          s."personalCode" = :personalCode
-        GROUP BY
-          s."personalCode", s."firstName", s."lastName", g.subject;
+            s."personalCode",
+            s.name,
+            s."lastName",
+            subj.subject,
+            MAX(g.grade) as maxGrade,
+            MIN(g.grade) as minGrade,
+            AVG(g.grade) as avgGrade,
+            COUNT(g.grade) as totalGrades
+          FROM
+               (
+                  SELECT DISTINCT subject
+                  FROM "Grades"
+               ) AS subj
+          CROSS JOIN "Students" AS s
+              LEFT JOIN "Grades" AS g ON s."personalCode" = g."personalCode" AND subj.subject = g.subject
+          WHERE
+              s."personalCode" = '9245EE000878'
+          GROUP BY
+              s."personalCode", s.name, s."lastName", subj.subject;
       `, { replacements: { personalCode }, nest: true, type: QueryTypes.SELECT });
     
 

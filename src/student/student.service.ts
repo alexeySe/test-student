@@ -1,13 +1,13 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Student } from './student.model';
-import { CreateStudentDto } from './create-student.dto';
+import { StudentDto } from 'src/statistic/Dto/student.dto';
 
 @Injectable()
 export class StudentService {
     constructor(@InjectModel(Student) private studentRepository: typeof Student) {}
 
-    async createUser( dto: CreateStudentDto) {
+    async createUser( dto: StudentDto) {
         const existStudent = await this.getUserByPersonalCode(dto.personalCode)
         if (existStudent) {
             throw new HttpException('Student with this personalCode exists', HttpStatus.BAD_REQUEST);

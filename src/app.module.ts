@@ -1,17 +1,16 @@
 import { Module } from '@nestjs/common';
 import { StudentModule } from './student/student.module';
-import { GradesModule } from './grades/grades.module';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Student } from './student/student.model';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Grades } from './grades/grades.model';
 import { StatisticModule } from './statistic/statistic.module';
+import { NatsModule } from './nats/nats.module';
 
 @Module({
   imports: [
     StudentModule,
-    GradesModule,
     ConfigModule.forRoot({
       envFilePath: `.${process.env.NODE_ENV}.env`,
       isGlobal: true,
@@ -40,6 +39,7 @@ import { StatisticModule } from './statistic/statistic.module';
       })
     }),
     StatisticModule,
+    NatsModule,
   ],
   controllers: [],
   providers: [],

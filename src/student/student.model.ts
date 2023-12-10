@@ -14,7 +14,7 @@ export class Student extends Model<Student> {
   personalCode: string
 
   @Column({type: DataType.STRING, allowNull: false})
-  firstName: string;
+  name: string;
 
   @Column({type: DataType.STRING, allowNull: false})
   lastName: string;
