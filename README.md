@@ -31,6 +31,14 @@
 ```bash
 $ npm install
 ```
+## Add .env file (.development.env || .production.env)
+
+PORT=8080
+POSTGRES_HOST=localhost
+POSTGRES_USER=
+POSTGRES_DB=
+POSTGRES_PASSWORD=
+POSTGRES_PORT=5432
 
 ## Running the app
 
@@ -45,18 +53,6 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
 
 ## Support
 
