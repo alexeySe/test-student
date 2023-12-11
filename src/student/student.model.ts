@@ -1,5 +1,5 @@
 import { Column, DataType, HasMany, Model, Table } from 'sequelize-typescript';
-import { Grades } from 'src/grades/grades.model';
+import { Grades } from 'src/student/grades.model';
 
 @Table({
   timestamps: false

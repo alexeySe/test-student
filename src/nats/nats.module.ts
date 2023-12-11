@@ -3,7 +3,7 @@ import { NatsController } from './nats.controller';
 import { NatsService } from './nats.service';
 import { StudentModule } from 'src/student/student.module';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { Grades } from 'src/grades/grades.model';
+import { Grades } from 'src/student/grades.model';
 
 
 @Module({

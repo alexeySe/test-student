@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
 import { StudentModule } from './student/student.module';
-import { ClientsModule, Transport } from '@nestjs/microservices';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Student } from './student/student.model';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { Grades } from './grades/grades.model';
+import { Grades } from './student/grades.model';
 import { StatisticModule } from './statistic/statistic.module';
 import { NatsModule } from './nats/nats.module';
 
@@ -12,8 +11,7 @@ import { NatsModule } from './nats/nats.module';
   imports: [
     StudentModule,
     ConfigModule.forRoot({
-      // envFilePath: `.${process.env.NODE_ENV}.env`,
-      envFilePath: null,
+      envFilePath: `.${process.env.NODE_ENV}.env`,
       isGlobal: true,
   }),
     SequelizeModule.forRootAsync({
