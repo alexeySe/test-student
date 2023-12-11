@@ -51,11 +51,11 @@ export class NatsService {
     const nc = await NATS.connect({ servers: 'nats://192.162.246.63:4222' });
     const sc = NATS.StringCodec();
     let responseData: string | undefined;
-
+    const requestData = JSON.stringify({ personalCode });
     try {
       const response = await nc.request(
         'students.v1.get',
-        sc.encode(personalCode),
+        sc.encode(requestData),
         { timeout: 1000 },
       );
       responseData = sc.decode(response.data);
